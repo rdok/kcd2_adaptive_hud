@@ -1,9 +1,12 @@
+local is_hardcore = true
+local is_debug = true
+
 adaptive_hud = {
     -- User preferences
-    always_hide_health_stamina = true,
-    always_hide_compass = true,
-    always_hide_food = true,
-    always_hide_weapon = true,
+    always_hide_health_stamina = is_hardcore,
+    always_hide_compass = is_hardcore,
+    always_hide_food = is_hardcore,
+    always_hide_weapon = is_hardcore,
     ui_visibility_after_menu_close_ms = 5000,
     health_threshold = "0.75",
     -- No API function to get the total stamina was found, only the current one.
@@ -24,7 +27,9 @@ local function log_error(message, ...)
     System.LogAlways(formatted_message)
 end
 
+
 local function log_info(message, ...)
+    if not is_debug then return end
     local formatted_message = string.format("$5[%s.INFO] " .. message, log_prefix, ...)
     System.LogAlways(formatted_message)
 end
