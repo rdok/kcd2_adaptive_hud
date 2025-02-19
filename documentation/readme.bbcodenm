@@ -1,0 +1,43 @@
+[size=6]Adaptive HUD[/size]
+
+[url=https://www.nexusmods.com/kingdomcomedeliverance2/mods/721?][img]https://img.shields.io/badge/Mod-Adaptive%20HUD%20-bf4848?style=flat-square&logo=nexusmods[/img][/url] [url=https://github.com/rdok/kcd2_adaptive_hud][img]https://img.shields.io/badge/Open-Source-2ea44f?style=flat-square&logo=github[/img][/url] 
+
+[size=4]?? Hardcore Mode:[/size]
+This version [b]permanently hides all UI elements except buffs[/b]. Buffs will still automatically disappear after [b]a few seconds[/b]. The game already provides clear visual and audio cues for stamina and health, such as the screen turning blue and Henry breathing heavily. This is the version I personally use.
+
+
+[url=https://www.nexusmods.com/kingdomcomedeliverance2/mods/721][img]https://github.com/rdok/kcd2_adaptive_hud/blob/main/documentation/showcase_hardcore.gif?raw=true[/img][/url]
+
+[size=4]??? Full Mode:[/size]
+This version does not permanently hide any UI elements. Instead, the [b]health bar, stamina bar, minimap, and buffs[/b] will [b]automatically disappear[/b] after [b]a few seconds[/b] when closing the player menu (Inventory, Map, etc.). Health and stamina bars will also reappear when they drop below a set threshold.
+
+[url=https://www.nexusmods.com/kingdomcomedeliverance2/mods/721][img]https://github.com/rdok/kcd2_adaptive_hud/blob/main/documentation/showcase_full.gif?raw=true[/img][/url]
+
+
+[size=4]?? Customization:[/size]
+You can modify the settings by editing the Lua script and recompressing the mod:
+
+[code]
+adaptive_hud = {
+    -- User preferences
+    always_hide_health_stamina = true,
+    always_hide_compass = true,
+    always_hide_food = true,
+    always_hide_weapon = true,
+    ui_visibility_after_menu_close_ms = 5000,
+    health_threshold = "0.75",
+    -- No API function was found to get total stamina, only the current value.
+    -- A static threshold was chosen instead.
+    stamina_threshold = "75",
+    -- END of user preferences
+}
+[/code]
+
+[size=4]?? Sources:[/size]
+[list]
+[*] [url=https://www.nexusmods.com/kingdomcomedeliverance2/mods/459]VS Code Lua Runner[/url]
+[*] [url=https://warhorse.nexusmods.com/]Lua API from KCD 1[/url]
+[*] Lua examples from KCD 2 game files; extract the PAK files, open with your favorite IDE, and search globally for Lua files.
+[*] https://benjaminfoo.github.io/Architect/constructions#
+[*] https://github.com/benjaminfoo/kcd_coding_guide
+[/list]
