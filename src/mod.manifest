@@ -5,7 +5,7 @@
         <modid>adaptive_hud</modid>
         <description>Show HUD when you need it, hide it when you do not.</description>
         <author>Rizarttt</author>
-        <version>1.0.0</version>
-        <created_on>16.02.2025</created_on>
+        <version>1.0.1</version>
+        <created_on>19.02.2025</created_on>
     </info>
 </kcd_mod>

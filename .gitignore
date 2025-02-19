@@ -1,2 +1,3 @@
 *.xml
 *.zip
+node_modules/
