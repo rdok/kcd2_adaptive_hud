@@ -2,7 +2,7 @@
 
 #### v1.0.1 19-Feb-25
 
-- fix: UI elements were not hidden upon reloading the game within the same season.
+- fix: UI elements were not hidden upon reloading the game within the same session.
 - fix: Remove info log messages from production build.
 
 #### v1.0.0 19-Feb-25
