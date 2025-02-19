@@ -34,3 +34,5 @@ adaptive_hud = {
 - [VS Code Lua Runner](https://www.nexusmods.com/kingdomcomedeliverance2/mods/459)
 - [Lua API from KCD 1](https://warhorse.nexusmods.com/)
 - Lua examples from KCD 2; extract the PAK files, open with your favorite IDE, and search globally for Lua files.
+- https://benjaminfoo.github.io/Architect/constructions#
+- https://github.com/benjaminfoo/kcd_coding_guide
