@@ -1,17 +1,22 @@
 adaptive_hud = {
-    stats_execution_interval_ms = "2000",
+    -- User preferences
+    always_hide_health_stamina = false,
+    always_hide_compass = false,
+    always_hide_food = false,
+    always_hide_weapon = false,
+    ui_visibility_after_menu_close_ms = 5000,
     health_threshold = "0.75",
-    stamina_threshold = "100",
+    -- No API function to get the total stamina was found, only the current one.
+    --   A static was picked instead
+    stamina_threshold = "75",
+    -- END of user preferences
+
+    show_stats_upon_menu_close = false,
+    stats_execution_interval_ms = "1000",
     stats_timer_id = nil,
     menu_close_timer_id = nil,
-    force_show_stats = false,
-    always_hide_stats = false,
-    always_hide_compass = true,
-    always_hide_food = true,
-    always_hide_weapon = true,
     first_on_action_executed = true,
     onload_executed = false,
-    menu_close_timer = 7000
 }
 
 local log_prefix = "adaptive_hud"
@@ -50,7 +55,7 @@ end
 
 function adaptive_hud:get_show_stats()
     log_info("get_show_stats called")
-    local showStats = self.always_hide_stats and "0" or (self:has_low_stats() and "1" or "0")
+    local showStats = self.always_hide_health_stamina and "0" or (self:has_low_stats() and "1" or "0")
 
     log_info(string.format("Calculated showStats: %s", showStats))
     return showStats
@@ -58,11 +63,12 @@ end
 
 function adaptive_hud:updateStats()
     log_info("updateStats called")
-    if self.force_show_stats then
+    if self.show_stats_upon_menu_close then
         log_info("updateStats - force show stats enabled")
         self:start_stats_timer(tonumber(self.stats_execution_interval_ms))
         return
     end
+    log_info("System.SetCVar('wh_ui_ShowStats")
     System.SetCVar('wh_ui_ShowStats', self:get_show_stats())
     log_info("updateStats completed, restarting timer")
     self:start_stats_timer(tonumber(self.stats_execution_interval_ms))
@@ -82,9 +88,9 @@ function adaptive_hud:start_menu_close_timer()
     if self.menu_close_timer_id then
         Script.KillTimer(self.menu_close_timer_id)
     end
-    self.menu_close_timer_id = Script.SetTimer(adaptive_hud.menu_close_timer, function(nTimerId)
+    self.menu_close_timer_id = Script.SetTimer(adaptive_hud.ui_visibility_after_menu_close_ms, function(nTimerId)
         log_info("start_menu_close_timer.callback")
-        self.force_show_stats = false
+        self.show_stats_upon_menu_close = false
         System.SetCVar('wh_ui_ShowStats', self:get_show_stats())
         System.SetCVar('wh_ui_ShowStats', "0")
         System.SetCVar('wh_ui_showCompass', "0")
@@ -93,21 +99,6 @@ function adaptive_hud:start_menu_close_timer()
         System.SetCVar('wh_ui_ShowBuffs', "0")
         self.menu_close_timer_id = nil
     end)
-end
-
-local original_OnInit = Player.OnInit
-
-function Player:OnInit()
-    log_info("Player:OnInit")
-
-    if original_OnInit then
-        local success, result = pcall(original_OnInit, self)
-        if not success then
-            log_error("Error in original Player:OnInit: " .. tostring(result))
-        end
-    end
-
-    adaptive_hud:StatsTimerOnLoad()
 end
 
 local original_OnAction = Player.OnAction
@@ -136,11 +127,26 @@ function Player:OnAction(action, activation, value)
     elseif not valid_actions[action] or activation ~= "release" then
         return
     end
-    System.SetCVar('wh_ui_ShowStats', adaptive_hud.always_hide_stats and "0" or "1")
+    System.SetCVar('wh_ui_ShowStats', adaptive_hud.always_hide_health_stamina and "0" or "1")
     System.SetCVar('wh_ui_showCompass', adaptive_hud.always_hide_compass and "0" or "1")
     System.SetCVar('wh_ui_ShowQAMFood', adaptive_hud.always_hide_food and "0" or "1")
     System.SetCVar('wh_ui_ShowQAMWeapon', adaptive_hud.always_hide_weapon and "0" or "1")
     System.SetCVar('wh_ui_ShowBuffs', "1")
-    adaptive_hud.force_show_stats = true
+    adaptive_hud.show_stats_upon_menu_close = true
     adaptive_hud:start_menu_close_timer()
+end
+
+local original_OnInit = Player.OnInit
+
+function Player:OnInit()
+    log_info("Player:OnInit")
+
+    if original_OnInit then
+        local success, result = pcall(original_OnInit, self)
+        if not success then
+            log_error("Error in original Player:OnInit: " .. tostring(result))
+        end
+    end
+
+    adaptive_hud:StatsTimerOnLoad()
 end
